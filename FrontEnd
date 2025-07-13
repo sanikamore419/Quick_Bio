@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>QuickBio</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #f8f9fa, #e0f7fa);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* allow scrolling */
+            overflow-y: auto;
+        }
+
+        /* Container centers horizontally and has margin for vertical spacing */
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 600px;
+            max-width: 90%;
+            text-align: center;
+            margin: 40px 0; /* vertical margin for spacing */
+        }
+
+        h1 {
+            color: #00796b;
+            margin-bottom: 24px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #00796b;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 30px;
+        }
+
+        #result {
+            margin-top: 10px;
+            font-style: italic;
+            color: #555;
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 60px;
+        }
+
+        footer {
+            font-size: 14px;
+            color: #00796b;
+            margin: 20px 0 40px 0;
+            font-weight: 600;
+            font-style: italic;
+            text-align: center;
+            letter-spacing: 0.05em;
+            user-select: none;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            cursor: default;
+        }
+
+        footer:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ QuickBio ✨</h1>
+        <form id="bioForm">
+            <input type="text" id="hobbies" placeholder="Enter your hobbies" required />
+            <input type="text" id="profession" placeholder="Enter your profession" required />
+            <input type="text" id="tone" placeholder="Tone (e.g., witty, professional)" required />
+            <input type="text" id="platform" placeholder="Platform (e.g., Instagram)" required />
+            <button type="submit">Generate Bio</button>
+        </form>
+
+        <h2>Your Bio:</h2>
+        <div id="result">Your generated bio will appear here...</div>
+    </div>
+
+    <footer>Developed by Sanika🤍</footer>
+
+    <script>
+        document.getElementById('bioForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const hobbies = document.getElementById('hobbies').value;
+            const profession = document.getElementById('profession').value;
+            const tone = document.getElementById('tone').value;
+            const platform = document.getElementById('platform').value;
+
+            fetch('/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    hobbies: hobbies,
+                    profession: profession,
+                    tone: tone,
+                    platform: platform
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = data.bio;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerText = '❌ Failed to generate bio. Please try again.';
+            });
+        });
+    </script>
+</body>
+</html>
